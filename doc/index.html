@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1 align = "center" style="color:red;"> Progetto Car - Documentazione </h1>
+
+<p>
+	Studente: Ramy Al Zuhouri <br/>
+	Matricola: 0000731011 <br/>
+	Corso: Laurea Magistrale in Informatica <br/>
+	Universit&agrave; di Bologna 
+</p>
+
+<h2> Introduzione </h2>
+<p>
+	Questa documentazione ha lo scopo di descrivere come &egrave; stato realizzato il progetto di Grafica Computerizzata 2015/16, spiegando il
+	funzionamento a livello generale del programma, le regole del gioco che &egrave; stato realizzato, e le scelte implementative. Si &egrave;
+	scelto di realizzare un videogioco che permette di controllare una macchina, che pu&ograve; essere mossa e controllata all'interno di una pista
+	utilizzando la tastiera, o alternativamente un joystick. 
+	Sono stati utilizzati dei modelli tridimensionali, alcuni dei quali sono stati forniti in partenza, altri sono stati realizzati utilizzando 
+	il software di modellazione 3D Blender. Il progetto &egrave; stato realizzato in C++, utilizzando le librerie grafiche di OpenGL, GLUT, SDL
+	e GLEW. 
+</p>
+
+<figure>
+	<img src = "img/Car.png">
+	<figcaption> Figura 1: inquadratura con camera posteriore e ombre attivate. </figcaption>
+</figure>
+
+<h2> Funzionamento del gioco </h2>
+<p>
+	Il gioco parte con un automobile ferma all'inizio della pista. &Egrave; possibile uscire fuori pista, dove &egrave; presente della sabbia, senza
+	subire delle penalizzazioni. &Egrave; per&ograve; necessario seguire la pista senza tagliare il percorso, altrimenti si rischia di non vedersi
+	conteggiati i giri. Lo scopo del gioco &egrave; quello di effettuare tre giri di pista con il minor tempo possibile. Di tanto in tanto, vengono
+	generate delle sfere in maniera casuale, contenenti una foto personale. Le sfere quando vengono generate, vengono posizionate ad una distanza 
+	ragionevole dall'auto, lungo il percorso e mai in una posizione tale che &egrave; necessario tornare indietro per prenderle. Quando la sfera viene
+	toccata, succedono due cose: 
+	<ul>
+		<li> Vengono sottratti 15 secondi dal tempo di gioco. </li>
+		<li> La sfera viene conteggiata (viene visualizzata in basso nella schermata - vedi figura 3). Possono essere accumulate fino a tre sfere contemporaneamente. Quando si possideono tre sfere, &egrave; possibile
+			 utilizzare il <b>turbo</b>, ovvero l'auto aumenta la sua velocit&agrave; e la sua accelerazione in maniera significativa per 10 secondi.
+	</ul>
+	Non viene mai generata pi&ugrave; di una sfera contemporaneamente. Inoltre, una volta generata, una sfera rimane attiva per una durata massima di 30 
+	secondi, oltre la quale scompare. <br/>
+	Lo <b>scopo del gioco</b> &egrave; quello di effettuare tre giri di pista nel minor tempo possibile. Una volta finiti i tre giri di pista, &egrave; 
+	possibile salvare il proprio punteggio, inserendo il proprio nome. 
+
+	<p><b>PS:</b> quando l'automobile esce dai confini della mappa, viene riposizionata nel punto di partenza e la sua velocit&agrave; viene resettata. Inoltre
+	 		   vengono assegnati 10 secondi di penalit&agrave;.</p>
+
+	<figure>
+		<img src = "img/Sfera.png">
+		<figcaption> Figura 2: auto in prossimit&agrave; di una sfera. </figcaption>
+	</figure>
+
+	<figure>
+		<img src = "img/Indicatori Sfere.png">
+		<figcaption> Figura 3: tutte e tre le sfere sono state raccolte: &egrave; possibile usare il turbo. </figcaption>
+	</figure>
+</p>
+
+<h2> Controlli e indicatori </h2>
+<p>
+	Per controllare l'auto con la tastiera, si utilizzano i seguenti tasti:
+	<ul>
+		<li> 'W' per accelerare. </li>
+		<li> 'S' per decelerare (o per aumentare la velocit&agrave; in retromarcia). </li>
+		<li> 'A' per sterzare a sinistra. </li>
+		<li> 'D' per sterzare a destra. </li>
+		<li> Frecce direzionali: possono essere utilizzati in alternativa ai tasti 'w', 'a', 's', 'd'. </li>
+	</ul>
+	Alternativamente &egrave; possibile utilizzare un joystick per controllare l'auto. Per attivare il joystick, &egrave; necessario premere il tasto 'j'.
+	Una volta attivato, il joystick pu&ograve; essere disattivato premendo nuovamente il tasto 'j'*. Una volta attivato il joystick, si possono utilizzare i
+	seguenti controlli:
+	<ul>
+		<li> L'asse x del joystick controlla lo sterzo. </li>
+		<li> L'asse y del joystick controlla l'acceleratore. </li>
+	</ul>
+	A differenza della tastiera, l'input del joystick &egrave; continuo, ovvero &egrave; sufficiente mantenere un controllo del joystick in una certa posizione - come ad esempio la manetta - per accelerare di continuo con un'intensit&agrave; proporzionale alla posizione della manetta. Con la tastiera
+	invece l'accelerazione &egrave; discreta: ovvero l'auto pu&ograve; accelerare, pu&ograve; decelerare oppure pu&ograve; non effettuare nessuna delle
+	due cose, per&ograve; non &egrave; possibile accelerare in maniera ridotta (ad esempio al 40% dell'accelerazione massima). Per far ci&ograve; occorre 
+	premere e rilasciare i tasti di continuo. Ci&ograve; rende l'auto molto pi&ugrave; controllabile se si utilizza un joystick. <br/>
+	Il gioco &egrave; stato testato con un joystick Logitech Extreme 3D Pro, configurato in tal modo:
+	<ul>
+		<li> La cloche &egrave; mappata sull'asse x del joystick. </li>
+		<li> La manetta &egrave; mappata sull'asse y del joystick. </li> 
+	</ul>
+
+	Inoltre sono presenti i seguenti controlli:
+	<ul>
+		<li> Tasti 1-6: gestisce l'inquadratura. 1: frontale, 2: laterale - destra, 3: laterale - sinistra,
+             4: dall'alto, 5: frontale - bassa, 6: posteriore. </li>
+        <li> Tasto whitespace: attiva il turbo (disponibile soltanto quando si possiedono tre sfere). </li>
+        <li> Rotellina del mouse: controlla lo zoom. </li>
+        <li> Tasto 'o': abilita / disabilita le ombre. </li>
+        <li> Tasto 'k': abilita / disabilita l'environment map della macchina (se disattivata l'auto viene disegnata utilizzando un materiale).</li>
+        <li> Tasto 'l': abilita / disabilita la visualizzazione in wireframe dell'auto. </li>
+        <li> Tasto 'p': abilita / disabilita il pilota automatico. Se attivato, il pilota automatico controlla l'auto facendola andare avanti ad una 
+        	 velocit&agrave; costante, senza utilizzare lo sterzo.</li>
+        <li> Tasto escape: apre / chiude il pannello di controllo (vedi sotto). </li>
+	</ul>
+
+	Inoltre sono presenti i seguenti indicatori: 
+	<ul>
+		<li> In alto a sinistra viene visualizzato il numero di giri di pista effettuati. </li>
+		<li> In alto a destra viene visualizzato il tempo di gioco. </li>
+		<li> In basso a sinistra viene visualizzata la mappa, dove la posizione attuale &egrave; indicata con un puntino rosso. </li>
+		<li> In basso al centro vengono visualizzate le sfere che sono state collezionate. </li>
+		<li> In basso a destra viene visualizzata la barra dei frame al secondo, da leggere cos&igrave;: la parte verde &egrave; tanto pi&ugrave; grande
+			 quanti sono i frame al secondo attuali. La parte rossa riempie il resto della barra. Il numero massimo di frame al secondo &egrave; pari a 100. 
+			 L'altezza della barra verde &egrave; quindi proporzionale al numero massimo di frame al secondo; cio&egrave; ad esempio se la scena viene disegnata a
+			 10 frame al secondo, un decimo della barra &egrave; colorata di verde.</li>
+	</ul>
+
+	*<b>NB:</b> su alcuni sistemi Linux, la tastiera viene rilevata automaticamente come joystick virtuale. Ci&ograve; significa che attivando il joystick,  
+		&egrave; possibile che i comandi vengano rilevati anche se non &egrave; stato collegato alcun joystick.
+</p>
+
+<h2> Pannello di controllo </h2>
+<p>
+	&Egrave; possibile mettere il gioco in pausa premendo il tasto escape. Quando il gioco &egrave; in pausa, viene visualizzato il pannello di controllo. 
+	Vengono visualizzate le impostazioni di gioco correnti, oltre ai comandi che sono necessari a cambiarle (vedi figura 4). Inoltre, premendo il tasto
+	'ricomincia' &egrave; possibile riniziare il gioco; premendo il tasto 'Esci dal gioco' la finestra viene distrutta e il programma termina immediatamente.<br/>
+	Quando vengono effettuati tre giri di pista, il gioco finisce e viene visualizzato il pannello di controllo, dove &egrave; possibile inserire il nome 
+	utilizzando i tasti alfanumerici e il tasto backspace per cancellare i caratteri. &Egrave; possibile salvare il tempo ottenuto cliccando sul tasto 
+	'Salva', dopodich&egrave; viene mostrata la scoreboard (vedi figura 6). Una volta salvato il punteggio, occorre premere il tasto 'Indietro' e riniziare il 
+	gioco. La scoreboard non &egrave; visualizzabile soltanto a fine gioco, ma pu&ograve; essere aperta in qualsiasi momento cliccando l'apposito tasto del
+	pannello di controllo.
+
+	<figure>
+		<img src = "img/Pannello di controllo.png">
+		<figcaption> Figura 4: pannello di controllo durante il gioco. </figcaption>
+	</figure>
+
+	<figure>
+		<img src = "img/Fine gioco.png">
+		<figcaption> Figura 5: pannello di controllo a fine gioco. &Egrave; possibile inserire il nome e salvare il tempo ottenuto. </figcaption>
+	</figure>
+
+	<figure>
+		<img src = "img/Scoreboard.png">
+		<figcaption> Figura 6: Scoreboard. Vengono visualizzati i migliori 10 tempi ottenuti. </figcaption>
+	</figure>
+</p>
+
+<h2> Scelte progettuali </h2>
+<p>
+	Per creare la finestra del gioco e per gestire gli eventi &egrave; stata utilizzata la libreria GLUT, che permette inoltre di registrare dei timer, che sono 
+	risultati utili per gestione degli step fisici e per il conteggio dei frame al secondo. Il timer principale che gestisce i passi della simulazione, effettuae
+	le seguenti operazioni ogni 1/100 di secondo:
+	<ul>
+		<li> Aggiorna la fisica, cio&egrave; ricalcola la velocit&agrave;, la posizione e lo sterzo dell'auto leggendo i comandi dell'utente. </li>
+		<li> Effettua un algoritmo molto semplificato di collision detecion (si tratta semplicemente di verificare la distanza tra l'auto e la sfera) per 
+			 controllare se l'auto sia andata sopra ad una sfera, che in tal caso viene collezionata. </li>
+		<li> Gestisce i checkpoint. Il sistema dei checkpoint viene utilizzato per verificare che l'utente non "bari", tagliando il percorso. Sono presenti 11
+			 checkpoint. L'automobile deve andare sopra (o almeno ad una distanza ragionevole) a tutti i checkpoint; il giro viene conteggiato soltanto quando 
+			 vengono raggiunti tutti e 11 i checkpoint. </li>
+	 	<li> Si controlla che l'automobile non sia uscita dalla mappa. In tal caso viene riposizionata al punto di partenza con velocit&agrave; 0 e 10 secondi
+	 		 di penalit&agrave; </li>
+	 	<li> Se il pilota automatico &egrave; abilitato, prima di aggiornare la fisica vengono dati gli opportuni comandi che servono a mantenere una velocit&agrave;
+	 		 moderata e costante. </li>
+	    <li> Viene chiamata la funzione <i>glutPostRedisplay()</i>, che marca la finestra come "da ridisegnare" in modo tale alla prossima iterazione del main 
+	    	 loop di GLUT venga effettivamente ridisegnata. Ci&ograve; significa che il numero "target" di frame al secondo raggiungibili &egrave; pari a 100. </li>
+	</ul>
+
+	Inoltre, un secondo timer effettua le seguenti operazioni ogni secondo:
+	<ul>
+		<li> Il numero di frame al secondo ottenuto nell'ultimo secondo viene aggiornato, in modo tale che possa essere visualizzato sulla barra in basso a destra. </li>
+		<li> Viene aggiornato il tempo di gioco. </li>
+		<li> Viene controllata la generazione delle sfere. Se non &egrave; presente alcuna sfera sulla mappa, la probabilit&agrave; di generare una sfera &egrave; pari a 
+			 1/15 ogni secondo. Inoltre anche la posizione &egrave; casuale: vengono scelti dei punti casuali nei quali &egrave; possibile posizionare la sfera nel caso che venga generata. Inoltre viene aggiunto un offset casuale. La posizione dipende dal checkpoint corrente (vedi lista precedente): non &egrave; possibile che venga generata una sfera in una posizione per la quale &egrave; necessario tornare indietro lungo il percorso. </li>
+	    <li> Nel caso che il turbo sia stato attivato, viene aggiunto un secondo al tempo di utilizzo (una volta raggiunti 10 secondi, viene disabilitato). </li> 
+	</ul>
+
+	Al fine di ottimizzare il rendering real time, si &egrave; deciso di utilizzare i <b>vertex buffer object (VBO)</b> invece di disegnare la scena in immediate mode
+	(ovvero utilizzando le primitive - con <i>glBegin()</i> e <i>glEnd()</i>). I VBO sono una funzionalit&agrave; di OpenGL (utilizzabile tramite l'estenzione GLEW), che
+	permette di inviare dati come vertici, normali e coordinate texture direttamente alla scheda grafica, dove vengono memorizzati in un buffer apposito invece di inviare
+	i dati uno alla volta utilizzando le primitive. Ci&ograve; ha comportato un discreto miglioramento delle performance <br/>
+	Inoltre, un'ulteriore ottimizzazione consiste nel memorizzare i vertici di una mesh in un VBO, e di utilizzare un altro VBO per memorizzare gli indici delle facce da
+	disegnare, onde evitare di memorizzare i vertici pi&ugrave; volte del necessario, con un fattore di risparmio memoria pari all'incirca a 6. Ogni mesh utilizza quindi:
+	<ul>
+		<li> Un VBO contenente tutti i vertici della mesh. </li>
+		<li> Un VBO contenente tutti gli indici della facce da disegnare. </li>
+		<li> Nel caso che venga utilizzata una texture, si utilizza un VBO per memorizzare le coordinate texture dei vertici. </li>
+		<li> In caso sia necessario, &egrave; possibile calcolare le normali per vertice, che vengono memorizzate in un apposito VBO. </li>
+		<li> &Egrave; possibile inoltre utilizzare un VBO per memorizzare i colori di ogni vertice. </li>
+	</ul>
+
+	&Egrave; stata implementata una funzione in grado di caricare un modello tridimensionale da un apposito file obj, generando automaticamente un oggetto di tipo <i>Mesh</i>. Si &egrave; scelto di utilizzare delle facce triangolari: in fase di caricamento ogni faccia rettangolare letta viene scomposta in due
+	facce triangolari. In questo modo &egrave; stato pi&ugrave; semplcie calcolare le normali. <br/>
+
+	Una volta creato un oggetto di tipo mesh, i dati vengono inviati ai buffer ma ne viene mantenuta una copia al fine di effettuare operazioni come ad esempio il ricentraggio della mesh, e il calcolo del bounding box. Infatti, per rendere pi&ugrave; semplice le operazioni di rotazione delle mesh attorno al proprio
+	baricentro (ad esempio una ruota della macchina deve poter ruotare attorno al proprio baricentro per sterzare), si &egrave; di ricentrare le mesh nel seguente modo: 
+	viene calcolato il bounding box della mesh, poi ogni vertice viene traslato opportunamente, in maniera tale da far coincidere il centro del nuovo bounding box della mesh con l'origine degli assi. In questo modo si ottengono delle mesh centrate, in grado di ruotare attorno a se stesse. Infine, quando tutte queste operazioni sono state effettuate, &egrave; possibile cancellare i dati ridondati, ovvero quelli che non sono memorizzati nel buffer, al fine di ottimizare l'utilizzo della memoria. <br/>
+
+	Sono state utilizzate le seguenti risorse pre-fornite:
+	<ul>
+		<li> Un file obj contenente lo chassis dell'automobile. </li>
+		<li> Quattro file obj per le ruote: per le ruote anteriori/posteriori e per i cerchioni anteriori/posteriori. </li>
+		<li> Un environment map da mappare sullo chassis dell'automobile. Si &egrave; scelto di generarne automaticamente le coordinate. </li>
+		<li> Una texture da applicare alle ruote, contenente una scritta da proiettare sulle gomme. In questo caso si &egrave; scelto di utilizzare il texture 
+			mapping. </li>
+		<li> Una texture del cielo, che &egrave; stata applicata su una sfera che racchiude la pista, generando le coordinate in maniera automatica. </li>
+		<li> Una texture per la sabbia, ottenuta gratuitamente dal sito <a href = "https://www.sketchuptextureclub.com"> sketchtextureclub </a>. </li>
+		<li> Una texture per l'asfalto, anche questa ottenuta dal sito <a href = "https://www.sketchuptextureclub.com"> sketchtextureclub </a>. </li>
+	</ul> 
+
+	Inoltre, sono state create le seguenti risorse:
+	<ul>
+		<li> Una pista in formato obj, realizzata col software di modellazione 3D Blender. Si &egrave; scelto di utilizzare delle curve NURBS per tracciare l'andamento
+			 della pista, a partire dalle quali &egrave; stata generata una mesh. </li>
+		<li> Un'immagine 2D della pista da utilizzare per la mappa da visualizzare in basso a sinistra, anch'essa generata con Blender.</li>
+		<li> Un modello tridimensionale di una sfera creato utilizzando Blender. Come nel caso del cielo, si sarebbe potuto utilizzare la funzione <i>gluSphere</i>, ma 
+			 al fine di sperimentare tutte le funzionalit&agrave; di OpenGL si &egrave; preferito utilizzare il texture mapping. </li>
+		<li> Una foto personale in formato PNG. </li>
+	</ul>
+
+	<p>Per caricare le <b>texture</b> sono state utilizzate le librerie SDL e SDL_Image. &Egrave; stato creato un oggetto di tipo <i>Mesh</i> caricando il file obj della pista, sul
+	quale &egrave; stata applicata la texture dell'asfalto utilizzando il texture mapping. Allo stesso modo, &egrave; stata utilizzata una mesh per le sfere, al quale 
+	&egrave; stata applicata la texture della foto personale.</p>
+
+	<p>Per quanto riguarda le <b>luci</b>, sono stati utilizzati due tipi di sorgenti luminose: una luce direzionale costituisce la sorgente di illuminazione principale, posta ad una grande altezza dal centro della pista; inoltre sono state utilizzate due luci spot per i fari anteriori dell'auto. </p>
+
+</p>
+
+<h2> Difficolt&agrave; riscontrate </h2>
+<p> 
+	Le principali <b>difficolt&agrave; riscontrate</b> riguardano il calcolo dei passi fisici della simulazione: inizialmente si era deciso di calcolare la fisica nel callback <i>display</i> di GLUT, che si occupa di ridisegnare la scena, ignorando prima di tutto il fatto che su macchine diverse si pu&ograve; ottenere un numero diverso di frame al secondo e quindi l'auto viaggiava pi&ugrave; velocemente su computer con GPU pi&ugrave; veloci, e pi&ugrave; lentamente su computer con 
+	GPU pi&ugrave; lente; e secondo poi, si ignorava il fatto che tra un frame e l'altro possono trascorrere degli intervalli diversi di tempo. Ci&ograve; significa che 
+	se si aggiorna la posizione dell'auto di una quantit&agrave; costante ad ogni frame, potrebbe accadere che tra un frame e l'altro la velocit&agrave; dell'auto risulta
+	diversa. Ci&ograve; si traduceva in un andamento "a scatti" dell'auto. Il problema &egrave; stato risolto utilizzando un timer che aggiorna la fisica a passo costante, ogni 1/100 di secondo. 
+</p>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
